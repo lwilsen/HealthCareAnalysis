@@ -24,23 +24,26 @@ def describe_dataframe(df):
   return pd.DataFrame(column_descriptions)
 
 def get_cont_enrolled(init_year, end_year, df):
-    '''Takes a dataframe of CMS inpatient data, and gives you the number of unique id's that were present
-    in every year from the init year to the end year'''
-
+    '''Inputs a dataframe of CMS inpatient data and date range, and returns a dictionary of how many unique
+    id's there are per year, as well as a dictionary of those unique id's per year'''
 
     select_years = df[df["YR"] < end_year]
 
     current_ids = select_years[select_years['YR'] == init_year]['BENE_ID'].unique()
     num_ids = [len(current_ids)]
+    current_id_dict = {str(init_year): list(current_ids)}
     
     for year in range(init_year + 1, end_year):
-        
         current_ids = select_years[(select_years["BENE_ID"].isin(current_ids)) & 
                                    (select_years['YR'] == year)]["BENE_ID"].unique()
         num_ids.append(len(current_ids))
+        current_id_dict[str(year)] = list(current_ids)
     
-    return(pd.DataFrame({"year" : range(init_year,end_year),
-                         "n_unique" : num_ids}))
+    result = {
+        "id_year_dict": current_id_dict, 
+        "nunique_df": pd.DataFrame({"year": range(init_year, end_year), "n_unique": num_ids})
+    }
+    return result
 
 def train_eval(
     mod: Any, 
