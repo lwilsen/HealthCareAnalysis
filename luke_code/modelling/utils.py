@@ -4,24 +4,34 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import make_pipeline
 
-def describe_dataframe(df):
-  '''This function takes in a pd dataframe, and returns a pd dataframe that describes
-  each of the columns within the original input dataframe.'''
+def describe_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    '''This function takes in a pd dataframe, and returns a pd dataframe that describes
+    each of the columns within the original input dataframe.'''
 
-  column_descriptions = []
-  for column in df.columns:
-    column_data = df[column]
-    description = {
-        'column_name': column,
-        'dtype': column_data.dtype,
-        'non_null_count': column_data.notna().sum(),
-        'null_count': column_data.isna().sum(),
-        'unique_count': column_data.nunique(),
-        'sample_values': list(column_data.dropna().unique())[:5],
-    }
-    column_descriptions.append(description)
+    column_descriptions = []
+    for column in df.columns:
+        column_data = df[column]
+        description = {
+            'column_name': column,
+            'dtype': column_data.dtype,
+            'non_null_count': column_data.notna().sum(),
+            'null_count': column_data.isna().sum(),
+            'unique_count': column_data.nunique(),
+            'sample_values': list(column_data.dropna().unique())[:5]
+        }
+        
+        if np.issubdtype(column_data.dtype, np.number):
+            description['min'] = column_data.min()
+            description['max'] = column_data.max()
+            description['mean'] = column_data.mean()
+        else:
+            description['min'] = "None"
+            description['max'] = "None"
+            description['mean'] = "None"
+        
+        column_descriptions.append(description)
 
-  return pd.DataFrame(column_descriptions)
+    return pd.DataFrame(column_descriptions)
 
 def get_cont_enrolled(init_year, end_year, df):
     '''Inputs a dataframe of CMS inpatient data and date range, and returns a dictionary of how many unique
