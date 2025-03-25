@@ -6,7 +6,7 @@ I'm going to be exploring this data based on her teaching's as a part of an inde
 
 ### Abstract
 
-Predicting hospital length of stay (LOS) and disease severity remains a critical challenge in healthcare management. Accurate predictions can assist hospital administrators in optimizing resource allocation, identifying high-risk patients, and improving overall care efficiency. However, LOS prediction has mainly been studied on an ad-hoc basis, making it hard to generalize the findings to other hospitals (Stone et al., 2022). Replicating and extending these methodologies on different datasets is essential to assess their generalizability and effectiveness.
+Predicting hospital length of stay (LOS) and disease severity remains a critical challenge in healthcare management. Accurate predictions can assist hospital administrators in optimizing resource allocation, identifying high-risk patients, and improving overall care efficiency. However, LOS prediction has mainly been studied on an ad-hoc basis, making it hard to generalize the findings to other hospitals [(Stone et al., 2022)](https://pmc.ncbi.nlm.nih.gov/articles/PMC9931263/#sec008. Replicating and extending these methodologies on different datasets is essential to assess their generalizability and effectiveness.
 
 This study aims to develop predictive models for LOS (using regression methods) and categorical risk outcomes, including the risk of prolonged hospitalization and severe patient outcomes. Using a synthetic Center for Medicaid and Medicare Services dataset, we will apply rigorous data preprocessing techniques such as cleaning, transformation, and variable selection, potentially incorporating principal component analysis (PCA).
 
