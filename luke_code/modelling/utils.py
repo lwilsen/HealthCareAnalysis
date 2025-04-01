@@ -1,3 +1,5 @@
+'''This script contains functions that are used for data processing and model evaluation.'''
+
 from typing import Dict, Any
 import pandas as pd
 import numpy as np
@@ -11,7 +13,10 @@ import matplotlib.pyplot as plt
 
 def describe_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     '''This function takes in a pd dataframe, and returns a pd dataframe that describes
-    each of the columns within the original input dataframe.'''
+    each of the columns within the original input dataframe.
+    
+    keyword arguments:
+    df -- a pandas dataframe'''
 
     column_descriptions = []
     for column in df.columns:
@@ -39,9 +44,14 @@ def describe_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(column_descriptions)
 
 def get_cont_enrolled(init_year, end_year, df):
-    '''Inputs a dataframe of CMS inpatient data and date range, and returns a dictionary of how many unique
-    id's there are per year, as well as a dictionary of those unique id's per year'''
-
+    '''Inputs a dataframe of CMS inpatient data and date range, and returns a dictionary of 
+    how many unique id's there are per year, as well as a dictionary of those unique id's per year.
+    
+    Keyword arguments:
+    init_year -- the year to start the analysis
+    end_year -- the year to end the analysis
+    df -- a pandas dataframe of CMS inpatient data
+    '''
     select_years = df[df["YR"] < end_year]
 
     current_ids = select_years[select_years['YR'] == init_year]['BENE_ID'].unique()
@@ -69,8 +79,18 @@ def train_eval(
     y_test_labels: np.ndarray, 
     model_accuracy_compare: Dict[str, float]
 ) -> float:
-    """This function takes in a model type, a scaler type, and training and testing data, and returns the accuracy of the model"""
+    """This function takes in a model type, a scaler type, and training and testing data, and 
+    returns the accuracy of the model.
     
+    Keyword arguments:
+    mod -- a model type
+    scaler -- a scaler type
+    x_train_features -- the training features
+    y_train_labels -- the training labels
+    x_test_features -- the testing features
+    y_test_labels -- the testing labels
+    model_accuracy_compare -- a dictionary to compare model accuracies
+    """
     if not isinstance(model_accuracy_compare, dict):
         raise TypeError("model_accuracy_compare must be a dictionary")
     
@@ -107,7 +127,18 @@ def reg_train_eval(
 ) -> float:
     """This function takes in a REGRESSION model type, a scaler type, and training and testing data, 
     and returns model metrics. This function takes into account the fact that predicted y values
-    should not be less than 0 (because length of stay (LOS) cannot be negative)."""
+    should not be less than 0 (because length of stay (LOS) cannot be negative).
+    
+    Keyword arguments:
+    mod -- a model type
+    scaler -- a scaler type
+    x_train_features -- the training features
+    y_train_labels -- the training labels
+    x_test_features -- the testing features
+    y_test_labels -- the testing labels
+    model_compare_dict -- a dictionary to compare model accuracies
+    prediction_storage -- a dictionary to store predictions
+    year -- the year of the training data, used  to identify the model"""
     
     if not isinstance(model_compare_dict, dict):
         raise TypeError("model_compare_dict must be a dictionary")
@@ -170,7 +201,17 @@ def piped_traineval(
     y_test_labels: np.ndarray, 
     model_accuracy_compare: Dict[str, float]
 ) -> float:
-    """This function takes in a model type, a scaler type, and training and testing data, and returns the accuracy of the model using a pipeline"""
+    """This function takes in a model type, a scaler type, and training and testing data, and 
+    returns the accuracy of the model using a pipeline.
+    
+    Keyword arguments:
+    mod -- a model type
+    scaler -- a scaler type
+    x_train_features -- the training features
+    y_train_labels -- the training labels
+    x_test_features -- the testing features
+    y_test_labels -- the testing labels
+    model_accuracy_compare -- a dictionary to compare model accuracies"""
     
     if not isinstance(model_accuracy_compare, dict):
         raise TypeError("model_accuracy_compare must be a dictionary")
@@ -192,7 +233,15 @@ def piped_traineval(
     return accuracy
 
 def df_train_test(df, target_col, test_size=0.2, random_state=42):
-    '''This function takes in a dataframe, a target column, and a test size, and returns the training and testing data'''
+    '''This function takes in a dataframe, a target column, and a test size, and returns 
+    the training and testing data.
+    
+    Keyword arguments:
+    df -- a pandas dataframe
+    target_col -- the target column
+    test_size -- the size of the test set
+    random_state -- the random state for reproducibility
+    '''
     from sklearn.model_selection import train_test_split
 
     X = df.drop(target_col, axis=1)
@@ -208,8 +257,14 @@ def graph_results(
     y_train_labels: np.ndarray, 
     y_test_labels: np.ndarray
 ) -> None:
-    """This function graphs the predicted results of a regression model."""
+    """This function graphs the predicted results of a regression model.
     
+    Keyword arguments:
+    y_train_pred -- the predicted values for the training set
+    y_test_pred -- the predicted values for the testing set
+    y_train_labels -- the actual values for the training set
+    y_test_labels -- the actual values for the testing set
+    """
     x_max = np.max([np.max(y_train_pred), np.max(y_test_pred)])
     x_min = np.min([np.min(y_train_pred), np.min(y_test_pred)])
 
